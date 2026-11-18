@@ -1,0 +1,26 @@
+{
+  "name": "reactive-sentinel-omni",
+  "version": "1.0.0",
+  "description": "Autonomous cross-chain wallet & vault circuit breaker powered by Reactive Network Omni (~1s CometBFT finality)",
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:gas": "REPORT_GAS=true hardhat test",
+    "deploy:lasna": "hardhat run scripts/deploy-reactive.js --network reactiveLasna",
+    "deploy:base": "hardhat run scripts/deploy-origin.js --network baseSepolia",
+    "deploy:unichain": "hardhat run scripts/deploy-origin.js --network unichainSepolia",
+    "wire:lasna": "hardhat run scripts/wire-sentinel.js --network reactiveLasna",
+    "simulate:breach": "hardhat run scripts/simulate-breach.js",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.7",
+    "hardhat": "^2.22.17"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0"
+  }
+}
