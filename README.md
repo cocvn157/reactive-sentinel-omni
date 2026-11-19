@@ -132,6 +132,24 @@ cast call 0x8888888888888888888888888888888888888888 "getCallbacks(uint256)((uin
 
 ---
 
+## Verified Live Testnet Deployment (Lasna + Ethereum Sepolia)
+
+### Deployed Contract Addresses
+- **Reactive Lasna (`5318007`):**
+  - `SentinelReactive`: `0x7d0Ea4C30A35f9e0bF3A6aCC3970620d7Deb687c`
+- **Ethereum Sepolia (`11155111`):**
+  - `ProtectedTreasury` (Vault): `0xca68eD28f1E75B8E8dB7b483a1F6A9E822007689`
+  - `MockOriginToken` (`mUSDC`): `0xb21281AB80f826DbaA629B3e63E8Dce1319cF49b`
+  - `OriginActivityEmitter`: `0x8363cF50a9C0A02Fd846C1dE03efC27d6F685b9B`
+
+### Full-Loop Verification (Origin Event -> `react()` -> Callback Freeze)
+1. **Subscription & Wiring (Lasna):** [`0x68ca538879c7cc2c8cc6b4fafd0ba7de6a01016cec6af5e1774d003fcc101854`](https://lasna.reactscan.net/tx/0x68ca538879c7cc2c8cc6b4fafd0ba7de6a01016cec6af5e1774d003fcc101854)
+2. **Origin Breach Event (Sepolia Block `12165588`, ts `1795055844`):** [`0x7898596c2d3ce4331549b133c0acfa1b5cbff35f788effb1f050c98483fcd8f8`](https://sepolia.etherscan.io/tx/0x7898596c2d3ce4331549b133c0acfa1b5cbff35f788effb1f050c98483fcd8f8) — `withdrawToken` of `1,200 mUSDC` exceeding `1,000 mUSDC` single-tx threshold.
+3. **Reactive `react()` & Callback Request (Lasna Block `8699951`, ts `1795055844`):** [`0x99de5abf68ce41c688f18a141497acd4b925ec7faeb46c72c04f533299465322`](https://lasna.reactscan.net/tx/0x99de5abf68ce41c688f18a141497acd4b925ec7faeb46c72c04f533299465322) — emitted `CircuitBreakerTriggered` and dispatched `requestCallbackV_1_0()`.
+4. **Destination Callback `onSentinelTrip()` Freeze (Sepolia Block `12165589`, ts `1795055856`):** [`0x43e9f10a89cd3a19df442655966e1e9e26b980ecf8ae5f17633232a3da475038`](https://sepolia.etherscan.io/tx/0x43e9f10a89cd3a19df442655966e1e9e26b980ecf8ae5f17633232a3da475038) — executed in **1 Sepolia block (+12s full-loop latency)**, flipping `ProtectedTreasury.frozen()` to `true`.
+
+---
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
